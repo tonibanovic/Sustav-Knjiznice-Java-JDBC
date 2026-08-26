@@ -29,11 +29,11 @@ public class DbFunctions {
         String autor_prezime;
         int godina_izdanja;
         int zaliha;
-        ArrayList<Knjiga> popis = new ArrayList<Knjiga>();
+        ArrayList<Knjiga> popis = new ArrayList<>();
         Knjiga knj;
 
         try {
-            String query = String.format("SELECT knjige.naslov, autori.ime, autori.prezime, knjige.godina_izdanja, knjige.zaliha FROM knjige JOIN autori ON knjige.autor_id = autori.id WHERE knjige.zaliha > 0;");
+            String query = "SELECT knjige.naslov, autori.ime, autori.prezime, knjige.godina_izdanja, knjige.zaliha FROM knjige JOIN autori ON knjige.autor_id = autori.id WHERE knjige.zaliha > 0";
             statement = conn.createStatement();
             rs = statement.executeQuery(query);
 
@@ -61,7 +61,7 @@ public class DbFunctions {
                     statement.close();}
             }
             catch (SQLException e) {
-                throw new RuntimeException(e);
+                System.out.println(e);
             }
 
         }
@@ -205,7 +205,7 @@ public class DbFunctions {
                 try {
                     statement.close();
                 } catch (SQLException e) {
-                    System.out.println(e);;
+                    System.out.println(e);
                 }
             }
             if(rs != null){
