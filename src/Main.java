@@ -36,6 +36,8 @@ public class Main {
     }
         public static void izbor_fun(int izbor){
             DbFunctions db = new DbFunctions();
+            KnjigaRepository kr = new KnjigaRepository();
+            ClanoviRepository cr = new ClanoviRepository();
             Connection conn = db.connect_to_db("postgres", "postgres", "Toni");
             ArrayList<Knjiga> popis_knjiga;
             ArrayList<Clanovi> popis_clanova;
@@ -43,20 +45,23 @@ public class Main {
             switch (izbor) {
                 case 1 -> {
                     System.out.println("Ovdje ce se prikazati izbor knjiga...\n");
-                    popis_knjiga = db.popis_knjiga(conn);
-                    db.ispis_knjiga(popis_knjiga);
+                    popis_knjiga = kr.popis_knjiga(conn);
+                    kr.ispis_knjiga(popis_knjiga);
                 }
                 case 2 -> {
-                    System.out.println("Uskoro apocinje proces unosenja knjiga...");
-                    db.unos_knjige(conn);
+                    System.out.println("Uskoro zapocinje proces unosenja knjiga...");
+                    kr.unos_knjige(conn);
                 }
-                case 3 -> System.out.println("Registracija clana...");
+                case 3 -> {
+                    System.out.println("Registracija clana...");
+                    cr.registracija_clana(conn);
+                }
                 case 4 -> System.out.println("Proces posudbe zapocnije...");
                 case 5 -> System.out.println("Proces vracanja knjige zapocinje...");
                 case 6 -> {
                     System.out.println("Prikaz svih članova..." + "\n");
-                    popis_clanova = db.prikaz_clanova(conn);
-                    db.ispis_clanova(popis_clanova);
+                    popis_clanova = cr.prikaz_clanova(conn);
+                    cr.ispis_clanova(popis_clanova);
                 }
 
                 case 7 -> {
