@@ -3,8 +3,13 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class KnjigaRepository {
+    Connection conn;
 
-    public ArrayList<Knjiga> popis_knjiga(Connection conn) {
+    KnjigaRepository(Connection conn){
+        this.conn = conn;
+    }
+
+    public ArrayList<Knjiga> popis_knjiga() {
         Statement statement = null;
         ResultSet rs = null;
         String naslov;
@@ -51,81 +56,8 @@ public class KnjigaRepository {
         return popis;
     }
 
-    public void ispis_knjiga(ArrayList<Knjiga> popis){
-        String naslov = "Naslov";
-        String ime = "Ime";
-        String prezime = "Prezime";
-        String godina = "Godina izdanja";
-        String zaliha = "Zaliha";
 
-
-        System.out.println(String.format("%11s %32s %32s %30s %19s", naslov, ime, prezime, godina, zaliha));
-        for(Knjiga knjige: popis){
-            System.out.printf("%-40s %-30s %-25s %-25d %-25d\n", knjige.naslov, knjige.autor_ime, knjige.autor_prezime, knjige.godina_izdanja, knjige.zaliha);
-        }
-
-    }
-
-    public void unos_knjige(Connection conn){
-        PreparedStatement statement = null;
-        ResultSet rs = null;
-        Scanner scanner = new Scanner(System.in);
-        String ime;
-        String prezime;
-        String naslov;
-        int godina;
-        int zaliha;
-        int id = 0;
-
-        System.out.println("Unesite ime i prezime autora koji je napisao knjigu: ");
-        System.out.print("Ime: ");
-        ime = scanner.nextLine();
-        System.out.print("Prezime: ");
-        prezime = scanner.nextLine();
-
-        try {
-            String query = "INSERT INTO autori (ime, prezime) VALUES (?, ?) " + "ON CONFLICT (ime, prezime) DO UPDATE SET ime = autori.ime " + "RETURNING id";
-            statement = conn.prepareStatement(query);
-            statement.setString(1, ime);
-            statement.setString(2, prezime);
-            rs = statement.executeQuery();
-
-            if (rs.next()) {
-                id = rs.getInt("id");
-            }
-        }catch (Exception e) {
-            System.out.println(e);
-        }
-        finally {
-            try {
-                if (statement != null) {
-                    statement.close();
-                }
-
-                if (rs != null) {
-                    rs.close();
-                }
-            } catch (Exception e) {
-                System.out.println(e);
-            }
-        }
-
-        System.out.print("Unesite naslov knjige: ");
-        naslov = scanner.nextLine();
-
-        System.out.print("Unesite godinu izdanja: ");
-        godina = scanner.nextInt();
-        scanner.nextLine();
-
-        System.out.print("Unesite broj zaliha za knjigu: ");
-        zaliha = scanner.nextInt();
-        scanner.nextLine();
-
-        upis_knjige(conn, naslov, id, godina, zaliha);
-
-    }
-
-    public void upis_knjige(Connection conn, String naslov, int id, int godina, int zaliha){
+    public void upis_knjige(String naslov, int id, int godina, int zaliha){
         PreparedStatement statement = null;
         try {
             String query = "INSERT INTO knjige (naslov, autor_id, godina_izdanja, zaliha) VALUES (?, ?, ?, ?) " + "ON CONFLICT (naslov, autor_id) " + "DO UPDATE SET zaliha = knjige.zaliha + EXCLUDED.zaliha";
@@ -150,6 +82,42 @@ public class KnjigaRepository {
                 System.out.println(e);
             }
         }
+
+    }
+
+    public int provjera_autora(String ime_autora, String prezime_autora){
+        int id = 0;
+        PreparedStatement statement = null;
+        ResultSet rs = null;
+
+        try {
+            String query = "INSERT INTO autori (ime, prezime) VALUES (?, ?) " + "ON CONFLICT (ime, prezime) DO UPDATE SET ime = autori.ime " + "RETURNING id";
+            statement = conn.prepareStatement(query);
+            statement.setString(1, ime_autora);
+            statement.setString(2, prezime_autora);
+            rs = statement.executeQuery();
+
+            if (rs.next()) {
+                id = rs.getInt("id");
+            }
+        }catch (Exception e) {
+            System.out.println(e);
+        }
+        finally {
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        }
+
+        return id;
 
     }
 

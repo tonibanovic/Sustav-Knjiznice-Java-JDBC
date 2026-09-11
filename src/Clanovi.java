@@ -1,13 +1,9 @@
-import java.time.LocalDate;
-
 public class Clanovi {
     String ime;
     String prezime;
     String datum_clanstva;
     int idbm;
     String ime_oca;
-
-
 
     Clanovi(String ime, String prezime, String datum_clanstva, int idbm, String ime_oca){
         this.ime = ime;

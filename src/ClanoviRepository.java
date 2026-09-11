@@ -4,8 +4,12 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class ClanoviRepository {
+    Connection conn;
+    ClanoviRepository(Connection conn){
+        this.conn = conn;
+    }
 
-    public ArrayList<Clanovi> prikaz_clanova(Connection conn){
+    public ArrayList<Clanovi> prikaz_clanova(){
         String ime;
         String prezime;
         java.sql.Date datum;
@@ -58,49 +62,7 @@ public class ClanoviRepository {
 
     }
 
-    public void ispis_clanova(ArrayList<Clanovi> popis){
-        String ime = "Ime";
-        String prezime = "Prezime";
-        String ime_oca = "Ime_oca";
-        String datum = "Datum_clanstva";
-        String idbm = "idbm";
-
-        System.out.printf("%s %23s %23s %26s %12s\n", ime, prezime, ime_oca, datum, idbm);
-
-        for(Clanovi clan : popis){
-            System.out.printf("%-20s %-22s %-18s %-20s %s\n", clan.ime, clan.prezime, clan.ime_oca, clan.datum_clanstva, clan.idbm);
-        }
-
-    }
-
-    public void registracija_clana(Connection conn){
-        String ime;
-        String prezime;
-        String ime_oca;
-        int idbm;
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.print("Unesite ime clana: ");
-        ime = scanner.nextLine();
-
-        System.out.print("Unesite prezime clana: ");
-        prezime = scanner.nextLine();
-
-        System.out.print("Unesite ime oca clana: ");
-        ime_oca = scanner.nextLine();
-
-        System.out.print("Unesite idbm clana: ");
-        idbm = scanner.nextInt();
-
-        scanner.nextLine();
-
-        LocalDate datum = LocalDate.now();
-
-        unos_clana(ime, prezime, idbm, ime_oca, datum, conn);
-
-    }
-
-    public void unos_clana(String ime, String prezime, int idbm, String ime_oca, LocalDate datum, Connection conn){
+    public void unos_clana(String ime, String prezime, int idbm, String ime_oca, LocalDate datum){
         PreparedStatement statement = null;
 
         try{
@@ -111,7 +73,7 @@ public class ClanoviRepository {
             statement.setDate(3, Date.valueOf(datum));
             statement.setInt(4, idbm);
             statement.setString(5, ime_oca);
-            statement.executeQuery();
+            statement.executeUpdate();
 
         }
         catch(Exception e){
