@@ -9,12 +9,13 @@ public class ClanoviUI {
         this.clanoviService = clanoviService;
     }
 
-    public void ispis_clanova(ArrayList<Clanovi> popis){
+    public void ispis_clanova(){
         String ime = "Ime";
         String prezime = "Prezime";
         String ime_oca = "Ime_oca";
         String datum = "Datum_clanstva";
         String idbm = "idbm";
+        ArrayList<Clanovi> popis = clanoviService.dohvatiSveClanove();
 
         System.out.printf("%s %23s %23s %26s %12s\n", ime, prezime, ime_oca, datum, idbm);
 

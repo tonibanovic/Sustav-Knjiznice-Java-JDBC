@@ -1,7 +1,5 @@
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Scanner;
-import java.time.LocalDate;
+
 
 public class DbFunctions {
     public Connection connect_to_db(String dbname, String user, String pass) {

@@ -1,6 +1,5 @@
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class KnjigaRepository {
     Connection conn;
@@ -10,7 +9,7 @@ public class KnjigaRepository {
     }
 
     public ArrayList<Knjiga> popis_knjiga() {
-        Statement statement = null;
+        PreparedStatement statement = null;
         ResultSet rs = null;
         String naslov;
         String autor_ime;
@@ -22,8 +21,8 @@ public class KnjigaRepository {
 
         try {
             String query = "SELECT knjige.naslov, autori.ime, autori.prezime, knjige.godina_izdanja, knjige.zaliha FROM knjige JOIN autori ON knjige.autor_id = autori.id WHERE knjige.zaliha > 0";
-            statement = conn.createStatement();
-            rs = statement.executeQuery(query);
+            statement = conn.prepareStatement(query);
+            rs = statement.executeQuery();
 
             while (rs.next()) {
                 naslov = rs.getString("naslov");
