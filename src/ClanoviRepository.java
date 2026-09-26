@@ -15,13 +15,14 @@ public class ClanoviRepository {
         java.sql.Date datum;
         int idbm;
         String ime_oca;
+        boolean status_posudbe;
         PreparedStatement statement = null;
         ResultSet rs = null;
         Clanovi clan;
         ArrayList<Clanovi> popis = new ArrayList<>();
 
         try{
-            String query = "SELECT ime, prezime, datum_clanstva, idbm, ime_oca FROM clanovi";
+            String query = "SELECT ime, prezime, datum_clanstva, idbm, ime_oca, status_posudbe FROM clanovi ORDER BY datum_clanstva";
             statement = conn.prepareStatement(query);
             rs = statement.executeQuery();
 
@@ -33,8 +34,9 @@ public class ClanoviRepository {
                 String date = String.format("%1$td-%1$tm-%1$tY", datum);
                 idbm = rs.getInt("idbm");
                 ime_oca = rs.getString("ime_oca");
+                status_posudbe = rs.getBoolean("status_posudbe");
 
-                clan = new Clanovi(ime, prezime, date, idbm, ime_oca);
+                clan = new Clanovi(ime, prezime, date, idbm, ime_oca, status_posudbe);
                 popis.add(clan);
             }
         }
@@ -66,7 +68,7 @@ public class ClanoviRepository {
         PreparedStatement statement = null;
 
         try{
-            String query = "INSERT INTO clanovi (ime, prezime, datum_clanstva, idbm, ime_oca) VALUES (?, ?, ?, ?, ?)";
+            String query = "INSERT INTO clanovi (ime, prezime, datum_clanstva, idbm, ime_oca, status_posudbe) VALUES (?, ?, ?, ?, ?, false)";
             statement = conn.prepareStatement(query);
             statement.setString(1, ime);
             statement.setString(2, prezime);

@@ -9,7 +9,14 @@ public class KnjigaService {
 
     public void obradiIUnesiKnigu(String naslov, String imeAutora, String prezimeAutora, int godina, int zaliha){
 
-       if(zaliha<0){
+        if(!imeAutora.matches("[a-zA-ZćšđčžČĆŠĐŽ ]+")){
+            throw new IllegalArgumentException("Ime autora ne smije biti broj!");
+        }
+        if(!prezimeAutora.matches("[a-zA-ZćšđčžČĆŠĐŽ ]+")){
+            throw new IllegalArgumentException("Prezime autora ne smije biti broj!");
+        }
+
+        if(zaliha<0){
            throw new IllegalArgumentException("Zaliha ne može biti negativna!");
        }
 

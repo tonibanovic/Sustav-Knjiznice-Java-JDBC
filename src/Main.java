@@ -18,7 +18,7 @@ public class Main {
         ClanoviService cs = new ClanoviService(cr);
         ClanoviUI cui = new ClanoviUI(cs);
 
-        PosudbaRepository pr = new PosudbaRepository();
+        PosudbaRepository pr = new PosudbaRepository(conn);
         PosudbaService ps = new PosudbaService(kr, pr, cr, cui);
         PosudbaUI pui = new PosudbaUI(kui, cui, ps);
 
@@ -75,7 +75,10 @@ public class Main {
                     System.out.println("Proces posudbe zapocnije...");
                     pui.ProcesPosudbe();
                 }
-                case 5 -> System.out.println("Proces vracanja knjige zapocinje...");
+                case 5 -> {
+                    System.out.println("Proces vracanja knjige zapocinje...");
+                    pui.proces_vracanja();
+                }
                 case 6 -> {
                     System.out.println("Prikaz svih članova..." + "\n");
                     cui.ispis_clanova();

@@ -30,25 +30,37 @@ public class ClanoviUI {
         String prezime;
         String ime_oca;
         int idbm;
+        boolean done = false;
         Scanner scanner = new Scanner(System.in);
 
-        System.out.print("Unesite ime clana: ");
-        ime = scanner.nextLine();
+        while(!done) {
+            System.out.print("Unesite ime clana: ");
+            ime = scanner.nextLine();
 
-        System.out.print("Unesite prezime clana: ");
-        prezime = scanner.nextLine();
+            System.out.print("Unesite prezime clana: ");
+            prezime = scanner.nextLine();
 
-        System.out.print("Unesite ime oca clana: ");
-        ime_oca = scanner.nextLine();
+            System.out.print("Unesite ime oca clana: ");
+            ime_oca = scanner.nextLine();
 
-        System.out.print("Unesite idbm clana: ");
-        idbm = scanner.nextInt();
+            try{
+                clanoviService.obrada_clanovi(ime, prezime, ime_oca);
+                done = true;
+            }
+            catch(IllegalArgumentException e){
+                System.out.println("Ime i prezime ne smije sadrzavati broj!");
+                continue;
+            }
 
-        scanner.nextLine();
+            System.out.print("Unesite idbm clana: ");
+            idbm = scanner.nextInt();
 
-        LocalDate datum = LocalDate.now();
+            scanner.nextLine();
 
-        clanoviService.unesi_podatke(ime, prezime, idbm, ime_oca, datum);
+            LocalDate datum = LocalDate.now();
+            clanoviService.unesi_podatke(ime, prezime, idbm, ime_oca, datum);
+        }
+
 
     }
 }

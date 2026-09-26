@@ -39,4 +39,36 @@ public class PosudbaService {
 
     }
 
+    public void posudba_unos_ub(Knjiga kg, int idbm){
+        pr.proces_posudbe_ubazu(kg, idbm);
+    }
+
+    public ArrayList<Posudba> proces_vracanja_izBaze(int idbm){
+        ArrayList<Posudba> posudba = pr.proces_vracanja_izBaze_popis(idbm);
+        return posudba;
+    }
+
+    public boolean provjeraUnosaKnjige(String naslov, ArrayList<Posudba> posClan){
+
+        for(Posudba pos : posClan){
+            if(naslov.equalsIgnoreCase(pos.naslov_knjige)){
+                return true;
+            }
+        }
+
+        return false;
+
+    }
+
+    public void vracanje_knjigeUBazu(int id, int idbm){
+        pr.proces_vracanja_uBazu(id, idbm);
+    }
+
+    public int knjiga(String naslov){
+        return kr.dohvatiIdKnjigePoNaslovu(naslov);
+
+    }
+
+
+
 }

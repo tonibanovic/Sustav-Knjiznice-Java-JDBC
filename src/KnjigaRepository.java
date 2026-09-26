@@ -11,6 +11,7 @@ public class KnjigaRepository {
     public ArrayList<Knjiga> popis_knjiga() {
         PreparedStatement statement = null;
         ResultSet rs = null;
+        int id;
         String naslov;
         String autor_ime;
         String autor_prezime;
@@ -20,18 +21,19 @@ public class KnjigaRepository {
         Knjiga knj;
 
         try {
-            String query = "SELECT knjige.naslov, autori.ime, autori.prezime, knjige.godina_izdanja, knjige.zaliha FROM knjige JOIN autori ON knjige.autor_id = autori.id WHERE knjige.zaliha > 0";
+            String query = "SELECT knjige.id, knjige.naslov, autori.ime, autori.prezime, knjige.godina_izdanja, knjige.zaliha FROM knjige JOIN autori ON knjige.autor_id = autori.id WHERE knjige.zaliha > 0";
             statement = conn.prepareStatement(query);
             rs = statement.executeQuery();
 
             while (rs.next()) {
+                id = rs.getInt("id");
                 naslov = rs.getString("naslov");
                 autor_ime = rs.getString("ime");
                 autor_prezime = rs.getString("prezime");
                 godina_izdanja = rs.getInt("godina_izdanja");
                 zaliha = rs.getInt("zaliha");
 
-                knj = new Knjiga(naslov, autor_ime, autor_prezime, godina_izdanja, zaliha);
+                knj = new Knjiga(id, naslov, autor_ime, autor_prezime, godina_izdanja, zaliha);
                 popis.add(knj);
 
             }
@@ -118,6 +120,25 @@ public class KnjigaRepository {
 
         return id;
 
+    }
+
+    public int dohvatiIdKnjigePoNaslovu(String naslov) {
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            String query = "SELECT id FROM knjige WHERE naslov = ?";
+            stmt = conn.prepareStatement(query);
+            stmt.setString(1, naslov);
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("id");
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        } finally {
+            try { if (rs != null) rs.close(); if (stmt != null) stmt.close(); } catch (Exception e) {}
+        }
+        return 0;
     }
 
 }
